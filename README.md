@@ -16,3 +16,9 @@
 `fphone` 產生手機號碼
 
 `ftwid` 產生身分證字號
+
+# 編譯
+[看這篇文章](https://itnext.io/creating-and-publishing-vs-code-extensions-912b5b8b529)
+```
+vsce package
+```
