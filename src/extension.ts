@@ -5,13 +5,14 @@ import { twFirstNames } from './twFirstNames';
 import { twLastNames } from './twLastNames';
 import { enFirstNames } from './enFirstName';
 import { enLastNames } from './enLastName';
-
+import * as turf from '@turf/turf';
+import { taiwan } from './taiwan';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-    const langs = ['html', 'javascript', 'typescript' , 'plaintext']
+    const langs = ['html', 'javascript', 'typescript', 'plaintext']
     const providers = [];
     langs.forEach(lang => {
 
@@ -23,6 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
                 const englishNameCompletion = genEnglishName('fename');
                 const phoneNumberCompletion = genPhoneNumber('fphone');
                 const twIdCompletion = genTaiwanIdentity('ftwid');
+                const twPointInTaiwanCompletion = genPointInTaiwan('ftwpoint');
+
+
+
 
 
                 // return all completion items as array
@@ -30,13 +35,41 @@ export function activate(context: vscode.ExtensionContext) {
                     chineseNameCompletion,
                     englishNameCompletion,
                     phoneNumberCompletion,
-                    twIdCompletion
+                    twIdCompletion,
+                    twPointInTaiwanCompletion
                 ];
             }
         });
 
         context.subscriptions.push(provider);
     })
+}
+
+function randomPoint() {
+    try {
+
+        var position = turf.randomPoint(1 , { bbox : [120.106188593, 21.9705713974, 121.951243931, 25.2954588893]})
+        return position.features[0].geometry.coordinates;
+
+        //這裡有點搞不起來不曉得問題在哪 , 有空再解
+        // let randomFeature = taiwan.features[Math.floor(Math.random() * taiwan.features.length)];
+        // var position = turf.randomPoint(1, { bbox: randomFeature.bbox })
+        // return position.features[0].geometry.coordinates;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function genPointInTaiwan(label: string): vscode.CompletionItem {
+    const completion = new vscode.CompletionItem(label);
+    // var pointOnPolygon = turf.pointOnFeature({ "type": "Feature", "geometry": { "type": "Polygon", "coordinates": [[[120.13192239511876, 23.530054831049934], [120.13656853666322, 23.543391487989133], [120.12631498290993, 23.544516266285207], [120.1272762535743, 23.530054831049934], [120.13192239511876, 23.530054831049934]]] }, "properties": { "COUNTYSN": "10009003", "COUNTYNAME": "雲林縣" } });
+    var point = randomPoint();
+    var lonlat = point as number[];
+    var lon = lonlat[0].toFixed(8);
+    var lat = lonlat[1].toFixed(8);
+    completion.insertText = `${lon} ${lat}`;
+    completion.documentation = '產生在台灣範圍內的經緯度點位'
+    return completion;
 }
 
 function genTaiwanIdentity(label: string): vscode.CompletionItem {
