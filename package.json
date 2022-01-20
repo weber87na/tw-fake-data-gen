@@ -4,6 +4,14 @@
     "description": "假的",
     "version": "0.0.1",
     "publisher": "weber87na",
+    "homepage": "https://github.com/weber87na/tw-fake-data-gen",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/weber87na/tw-fake-data-gen"
+    },
+    "bugs": {
+        "url": "https://github.com/weber87na/tw-fake-data-gen/issues"
+    },
     "engines": {
         "vscode": "^1.63.0"
     },
@@ -14,8 +22,8 @@
     "activationEvents": [
         "*",
         "onLanguage:typescript",
-		"onLanguage:javascript",
-		"onLanguage:html"
+        "onLanguage:javascript",
+        "onLanguage:html"
     ],
     "main": "./out/extension.js",
     "scripts": {

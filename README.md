@@ -1,6 +1,10 @@
+![image](./images/fake128x128.jpg)
+
 # 功能
 
 一切都是 `假的` ,  產生台灣常用的假資料
+
+![image](./images/features.gif)
 
 # 使用方式
 目前支援命令如下:
