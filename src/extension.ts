@@ -303,3 +303,5 @@ function genEnglishName(label: string): vscode.CompletionItem {
     completion.detail = '產生英文名字';
     return completion;
 }
+
+export function deactivate() {}
