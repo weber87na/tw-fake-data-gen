@@ -25,21 +25,21 @@
 
 `fcolor` 產生隨機 html 色碼
 
+`fage` 產生隨機年齡
+
+`femail` 產生隨機 email
+
 # 預計想完成的項目
 
 產生地址
 
 產生點位 geojson
 
-產生 email
-
 產生中文顏色
 
 產生普通電話
 
 產生商品名稱
-
-產生年齡
 
 # 編譯
 [看這篇文章](https://itnext.io/creating-and-publishing-vs-code-extensions-912b5b8b529)

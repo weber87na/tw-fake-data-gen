@@ -29,6 +29,8 @@ export function activate(context: vscode.ExtensionContext) {
                     const twDateCompletion = genTwDate('ftwdate');
                     const enDateCompletion = genEnDate('fendate');
                     const colorCompletion = genColor('fcolor');
+                    const ageCompletion = genAge('fage');
+                    const emailCompletion = genEmail('femail');
 
                     // return all completion items as array
                     return [
@@ -39,7 +41,9 @@ export function activate(context: vscode.ExtensionContext) {
                         twPointInTaiwanCompletion,
                         twDateCompletion,
                         enDateCompletion,
-                        colorCompletion
+                        colorCompletion,
+                        ageCompletion,
+                        emailCompletion
                     ];
                 }
             });
@@ -51,6 +55,27 @@ export function activate(context: vscode.ExtensionContext) {
     }
 }
 
+
+
+
+function genEmail(label: string): vscode.CompletionItem {
+    const completion = new vscode.CompletionItem(label);
+    let result = Math.random().toString(36).substring(2,11) + '@gmail.com';
+    completion.insertText = `${result}`;
+    completion.documentation = '產生 email'
+    completion.detail = '產生 email'
+    return completion;
+}
+
+
+function genAge(label: string): vscode.CompletionItem {
+    const completion = new vscode.CompletionItem(label);
+    let result = Math.floor(Math.random() * 100) + 1;
+    completion.insertText = `${result}`;
+    completion.documentation = '產生年齡'
+    completion.detail = '產生年齡'
+    return completion;
+}
 
 
 function genColor(label: string): vscode.CompletionItem {
