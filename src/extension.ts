@@ -12,38 +12,37 @@ import { feature } from '@turf/turf';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+    try {
+        const langs = ['html', 'javascript', 'typescript', 'plaintext']
+        const providers = [];
+        langs.forEach(lang => {
 
-    const langs = ['html', 'javascript', 'typescript', 'plaintext']
-    const providers = [];
-    langs.forEach(lang => {
+            const provider = vscode.languages.registerCompletionItemProvider(lang, {
 
-        const provider = vscode.languages.registerCompletionItemProvider(lang, {
+                provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
 
-            provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
+                    const chineseNameCompletion = genChineseName('fcname');
+                    const englishNameCompletion = genEnglishName('fename');
+                    const phoneNumberCompletion = genPhoneNumber('fphone');
+                    const twIdCompletion = genTaiwanIdentity('ftwid');
+                    const twPointInTaiwanCompletion = genPointInTaiwan('ftwpoint');
 
-                const chineseNameCompletion = genChineseName('fcname');
-                const englishNameCompletion = genEnglishName('fename');
-                const phoneNumberCompletion = genPhoneNumber('fphone');
-                const twIdCompletion = genTaiwanIdentity('ftwid');
-                const twPointInTaiwanCompletion = genPointInTaiwan('ftwpoint');
+                    // return all completion items as array
+                    return [
+                        chineseNameCompletion,
+                        englishNameCompletion,
+                        phoneNumberCompletion,
+                        twIdCompletion,
+                        twPointInTaiwanCompletion
+                    ];
+                }
+            });
 
-
-
-
-
-                // return all completion items as array
-                return [
-                    chineseNameCompletion,
-                    englishNameCompletion,
-                    phoneNumberCompletion,
-                    twIdCompletion,
-                    twPointInTaiwanCompletion
-                ];
-            }
-        });
-
-        context.subscriptions.push(provider);
-    })
+            context.subscriptions.push(provider);
+        })
+    } catch (error) {
+        console.log(`extension error:${error}`)
+    }
 }
 
 function randomPoint() {
@@ -55,12 +54,12 @@ function randomPoint() {
         var bbox = turf.bbox(randomFeature);
 
         //產生一個亂數點
-        var positions = turf.randomPoint(1, { bbox : bbox})
+        var positions = turf.randomPoint(1, { bbox: bbox })
 
         //判斷該點是否在亂數縣市的 geomerty 範圍裡面
-        let flag = turf.booleanContains(randomFeature , positions.features[0]);
+        let flag = turf.booleanContains(randomFeature, positions.features[0]);
 
-        if(flag) {
+        if (flag) {
             return positions.features[0].geometry.coordinates;
         }
 
@@ -81,6 +80,7 @@ function genPointInTaiwan(label: string): vscode.CompletionItem {
     var lat = lonlat[1].toFixed(8);
     completion.insertText = `${lon} ${lat}`;
     completion.documentation = '產生在台灣範圍內的經緯度點位'
+    completion.detail = '產生在台灣範圍內的經緯度點位'
     return completion;
 }
 
@@ -147,6 +147,7 @@ function genTaiwanIdentity(label: string): vscode.CompletionItem {
     const completion = new vscode.CompletionItem(label);
     completion.insertText = `${key}${gender}${n1}${n2}${n3}${n4}${n5}${n6}${n7}${n8}`;
     completion.documentation = '產生台灣身分證字號'
+    completion.detail = '產生台灣身分證字號'
     return completion;
 }
 
@@ -165,6 +166,7 @@ function genPhoneNumber(label: string): vscode.CompletionItem {
 
     completion.insertText = `09${n1}${n2}${n3}${n4}${n5}${n6}${n7}${n8}`;
     completion.documentation = '產生手機號碼';
+    completion.detail = '產生手機號碼';
 
     return completion;
 }
@@ -176,6 +178,7 @@ function genChineseName(label: string): vscode.CompletionItem {
     var fname = twFirstNames[Math.floor(Math.random() * twFirstNames.length)];
     completion.insertText = lname + fname;
     completion.documentation = '產生中文名字';
+    completion.detail = '產生中文名字';
     return completion;
 }
 
@@ -186,5 +189,6 @@ function genEnglishName(label: string): vscode.CompletionItem {
     var fname = enFirstNames[Math.floor(Math.random() * enFirstNames.length)];
     completion.insertText = lname + ' ' + fname;
     completion.documentation = '產生英文名字';
+    completion.detail = '產生英文名字';
     return completion;
 }
