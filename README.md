@@ -19,6 +19,12 @@
 
 `ftwpoint` 產生隨機台灣範圍的經緯度格式 lon lat
 
+`ftwdate` 產生隨機日期(民國年)
+
+`fendate` 產生隨機日期(西元年)
+
+`fcolor` 產生隨機 html 色碼
+
 # 編譯
 [看這篇文章](https://itnext.io/creating-and-publishing-vs-code-extensions-912b5b8b529)
 ```

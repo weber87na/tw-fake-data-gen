@@ -26,6 +26,9 @@ export function activate(context: vscode.ExtensionContext) {
                     const phoneNumberCompletion = genPhoneNumber('fphone');
                     const twIdCompletion = genTaiwanIdentity('ftwid');
                     const twPointInTaiwanCompletion = genPointInTaiwan('ftwpoint');
+                    const twDateCompletion = genTwDate('ftwdate');
+                    const enDateCompletion = genEnDate('fendate');
+                    const colorCompletion = genColor('fcolor');
 
                     // return all completion items as array
                     return [
@@ -33,7 +36,10 @@ export function activate(context: vscode.ExtensionContext) {
                         englishNameCompletion,
                         phoneNumberCompletion,
                         twIdCompletion,
-                        twPointInTaiwanCompletion
+                        twPointInTaiwanCompletion,
+                        twDateCompletion,
+                        enDateCompletion,
+                        colorCompletion
                     ];
                 }
             });
@@ -44,6 +50,60 @@ export function activate(context: vscode.ExtensionContext) {
         console.log(`extension error:${error}`)
     }
 }
+
+
+
+function genColor(label: string): vscode.CompletionItem {
+    const completion = new vscode.CompletionItem(label);
+    //https://stackoverflow.com/questions/1484506/random-color-generator
+    let result = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+    completion.insertText = `${result}`;
+    completion.documentation = '產生顏色'
+    completion.detail = '產生顏色'
+    return completion;
+}
+
+
+//https://www.codegrepper.com/code-examples/javascript/javascript+random+date+time
+function randomDate(start: Date, end: Date): Date {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+function genRandomEnDate() {
+    //產生最近 10 年內的日期
+    let today = new Date();
+    let fullYear = today.getFullYear() - Math.floor(Math.random() * 10) + 1
+    let result = randomDate(new Date(fullYear, 0, 1), today).toISOString().substring(0, 10);
+    return result;
+}
+function genRandomTwDate() {
+    //產生最近 10 年內的日期
+    let today = new Date();
+    let fullYear = today.getFullYear() - Math.floor(Math.random() * 10) + 1
+    let enDate = randomDate(new Date(fullYear, 0, 1), today).toISOString().substring(0, 10);
+    let twYear = Number(enDate.substring(0, 4)) - 1911;
+    return twYear.toString() + enDate.substring(4, 10);
+
+}
+
+function genEnDate(label: string): vscode.CompletionItem {
+    const completion = new vscode.CompletionItem(label);
+    let result = genRandomEnDate();
+    completion.insertText = `${result}`;
+    completion.documentation = '產生西元亂數日期'
+    completion.detail = '產生西元亂數日期'
+    return completion;
+}
+
+function genTwDate(label: string): vscode.CompletionItem {
+    const completion = new vscode.CompletionItem(label);
+    let result = genRandomTwDate();
+    completion.insertText = `${result}`;
+    completion.documentation = '產生民國亂數日期'
+    completion.detail = '產生民國亂數日期'
+    return completion;
+}
+
 
 //cache 隨機
 const randomPoints = [
