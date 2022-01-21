@@ -7,6 +7,7 @@ import { enFirstNames } from './enFirstName';
 import { enLastNames } from './enLastName';
 import * as turf from '@turf/turf';
 import { taiwan } from './taiwan';
+import { feature } from '@turf/turf';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -47,14 +48,25 @@ export function activate(context: vscode.ExtensionContext) {
 
 function randomPoint() {
     try {
+        //亂數取得某個縣市
+        let randomFeature = taiwan.features[Math.floor(Math.random() * taiwan.features.length)];
 
-        var position = turf.randomPoint(1 , { bbox : [120.106188593, 21.9705713974, 121.951243931, 25.2954588893]})
-        return position.features[0].geometry.coordinates;
+        //取得該縣市的 bbox , 不曉得為啥直接呼叫 bbox 產出來是錯的
+        var bbox = turf.bbox(randomFeature);
 
-        //這裡有點搞不起來不曉得問題在哪 , 有空再解
-        // let randomFeature = taiwan.features[Math.floor(Math.random() * taiwan.features.length)];
-        // var position = turf.randomPoint(1, { bbox: randomFeature.bbox })
-        // return position.features[0].geometry.coordinates;
+        //產生一個亂數點
+        var positions = turf.randomPoint(1, { bbox : bbox})
+
+        //判斷該點是否在亂數縣市的 geomerty 範圍裡面
+        let flag = turf.booleanContains(randomFeature , positions.features[0]);
+
+        if(flag) {
+            return positions.features[0].geometry.coordinates;
+        }
+
+        //萬一點跳海的話遞迴重新執行一次
+        randomPoint();
+
     } catch (error) {
         console.log(error);
     }

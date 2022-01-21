@@ -17,6 +17,8 @@
 
 `ftwid` 產生身分證字號
 
+`ftwpoint` 產生隨機台灣範圍的經緯度格式 lon lat
+
 # 編譯
 [看這篇文章](https://itnext.io/creating-and-publishing-vs-code-extensions-912b5b8b529)
 ```
